@@ -1,9 +1,16 @@
 package com.example;
 
+import java.awt.*
 import java.awt.event.*;
 import javax.swing.*;
 
 public class Main extends JComponent {
+	
+	public void paintComponent(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(32));
+		g2.setColor(Color.blue);
+	}
 
 	public static void main(String[] args) {
 		
@@ -13,7 +20,8 @@ public class Main extends JComponent {
 				JFrame frame = new JFrame("Brick Breaker");
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
-				
+				Main canvas = new Main(); 
+						
 				JPanel panel = new JPanel();
 				JButton button = new JButton("Ok");
 				panel.add(button);
@@ -28,6 +36,12 @@ public class Main extends JComponent {
 				frame.setResizable(true);
 				frame.setSize(500, 500);
 				frame.setVisible(true);
+				frame.setContentPane(canvas);
+				
+				
+				//canvas.paintComponent(g);
+				
+				
 			}
 		});
 	}
