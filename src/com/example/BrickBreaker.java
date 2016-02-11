@@ -2,48 +2,53 @@ package com.example;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.GridLayout;
+import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class BrickBreaker extends JFrame {
+public class BrickBreaker extends JComponent implements MouseMotionListener {
 	
-	static Paddle myPaddle;
-	
-	public BrickBreaker() {
-		super();
-		this.setTitle("Brick Breaker");
-		this.setSize(800,  600);
-		this.getContentPane().setLayout(new GridLayout());
-		this.setVisible(true);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		this.getContentPane().setBackground(Color.WHITE);
-	}
+	//static Paddle myPaddle;
+	int pX;
+	int pY;
 	
 	public void paintComponent(Graphics g) {
-		//Graphics2D g2 = (Graphics2D) g;
-		//g2.setStroke(new BasicStroke(32));
-		//g2.setColor(Color.blue);
-		//g2.drawLine(0, 0, getWidth(), getHeight());
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.BLUE);
+		g2.fillRect(350, 500, 100, 20);
 	}
 
-	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				BrickBreaker frame = new BrickBreaker(); 
-					
-				myPaddle = new Paddle();
-				myPaddle.setLocation(0, 0);
-				//myPaddle.set
-				myPaddle.setSize(10, 10);
-				frame.add(myPaddle);
-				 
+				JFrame frame = new JFrame("Brick Breaker");
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				
-				
+				BrickBreaker canvas = new BrickBreaker(); 
+						
+				frame.setResizable(true);
+				frame.setSize(800, 600);
+				frame.setVisible(true);
+				frame.setContentPane(canvas);
+				//frame.getContentPane().setLayout(new GridLayout());
 			}
 		});
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		System.out.println("gfdgdfgdf");
+		pX = e.getX();
+		pY = e.getY();
 	}
 }
