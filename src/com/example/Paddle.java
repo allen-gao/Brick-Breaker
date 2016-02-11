@@ -12,9 +12,9 @@ public class Paddle extends JComponent implements MouseMotionListener {
 	
 	protected void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setColor(Color.blue);
-		//g2.drawRect(0, 0, 20, 50);
+		g2.setColor(Color.BLUE);
 		g2.fillRect(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+		System.out.println(this.getWidth());
 	}
 	
 	
