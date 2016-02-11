@@ -8,13 +8,13 @@ import javax.swing.SwingUtilities;
 public class BrickBreaker extends JFrame {
 	
 	public static GameWindow gameWindow;
-	public static int width = 800;
-	public static int height = 600;
+	public static int width = 850;
+	public static int height = 650;
 	
 	public BrickBreaker() {
 		super();
 		this.setTitle("Brick Breaker");
-		this.setSize(800,  600);
+		this.setSize(width, height);
 		this.getContentPane().setLayout(new GridLayout());
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +26,7 @@ public class BrickBreaker extends JFrame {
 			public void run() {
 				BrickBreaker frame = new BrickBreaker();
 				
-				gameWindow = new GameWindow(800, 600);
+				gameWindow = new GameWindow(width, height);
 				frame.add(gameWindow);
 				gameWindow.runEvents();
 			}
