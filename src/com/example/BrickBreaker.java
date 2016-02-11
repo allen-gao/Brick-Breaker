@@ -8,8 +8,10 @@ import javax.swing.SwingUtilities;
 public class BrickBreaker extends JFrame {
 	
 	public static GameWindow gameWindow;
-	public static int width = 850;
-	public static int height = 650;
+	public static int width = 800;
+	public static int height = 600;
+	
+	public static int numBricks = 20;
 	
 	public BrickBreaker() {
 		super();
@@ -29,6 +31,7 @@ public class BrickBreaker extends JFrame {
 				gameWindow = new GameWindow(width, height);
 				frame.add(gameWindow);
 				gameWindow.runEvents();
+				gameWindow.gameLogic.createBricks(numBricks);
 			}
 		});
 	}
