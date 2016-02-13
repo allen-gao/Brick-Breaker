@@ -12,11 +12,23 @@ public class GameLogic {
 	public int brickWidth = 100;
 	public int brickHeight = 30;
 	
+	public int ballWidth = 20;
+	
+	Ball ball;
+	
 	ArrayList<Brick> bricks; // assume bricks are placed in sequence
 	
 	GameLogic(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
+	}
+	
+	public void addBall() {
+		this.ball = new Ball(windowWidth, windowHeight, 0, 0, ballWidth, Color.BLACK);
+	}
+	
+	public void paintBall(Graphics g) {
+		g.fillOval(ball.topX, ball.topY, ball.width, ball.width);
 	}
 	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
@@ -49,7 +61,6 @@ public class GameLogic {
 	}
 	
 	public void paintBricks(Graphics g) {
-		//g.fillRect(10, 10, 100, 100);
 		for (int i = 0; i < bricks.size(); i++) {
 			Brick brick = bricks.get(i);
 			g.setColor(brick.color);
