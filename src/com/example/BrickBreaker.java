@@ -32,6 +32,7 @@ public class BrickBreaker extends JFrame {
 				frame.add(gameWindow);
 				gameWindow.runEvents();
 				gameWindow.gameLogic.createBricks(numBricks);
+				gameWindow.gameLogic.addBall();
 			}
 		});
 	}

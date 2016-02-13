@@ -52,7 +52,8 @@ public class GameWindow extends JPanel {
 		paddleYPos = height - paddleYOffset;
 		g2.fillRect(paddleXPos, paddleYPos, paddleWidth, paddleHeight);
 		
-		gameLogic.paintBricks(g);
+		gameLogic.paintBricks(g2);
+		gameLogic.paintBall(g2);
 	}
 	
 	public void runEvents() {

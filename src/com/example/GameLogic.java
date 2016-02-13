@@ -12,7 +12,7 @@ public class GameLogic {
 	public int brickWidth = 100;
 	public int brickHeight = 30;
 	
-	public int ballWidth = 20;
+	public int ballWidth = 10;
 	
 	Ball ball;
 	
@@ -28,6 +28,7 @@ public class GameLogic {
 	}
 	
 	public void paintBall(Graphics g) {
+		g.setColor(ball.color);
 		g.fillOval(ball.topX, ball.topY, ball.width, ball.width);
 	}
 	
