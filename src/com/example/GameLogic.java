@@ -20,22 +20,25 @@ public class GameLogic {
 	}
 	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
-		if (bricks.size() == 0) {
-			return new Brick(windowWidth, windowHeight, 0, brickHeight, brickWidth, brickHeight, Color.green);
-		}
-		Brick lastBrick = bricks.get(bricks.size() - 1);
 		int topX;
 		int botY;
-		if (lastBrick.topX + lastBrick.width >= this.windowWidth) {
+		if (bricks.size() == 0) {
 			topX = 0;
-			botY = lastBrick.botY + this.brickHeight;
+			botY = brickHeight;
 		}
 		else {
-			topX = lastBrick.topX + this.brickWidth;
-			botY = lastBrick.botY;
+			Brick lastBrick = bricks.get(bricks.size() - 1);
+			
+			if (lastBrick.topX + lastBrick.width >= this.windowWidth) {
+				topX = 0;
+				botY = lastBrick.botY + this.brickHeight;
+			}
+			else {
+				topX = lastBrick.topX + this.brickWidth;
+				botY = lastBrick.botY;
+			}
 		}
-		Brick newBrick = new Brick(windowWidth, windowHeight, topX, botY, brickWidth, brickHeight, Color.green);
-		return newBrick;
+		return new Brick(windowWidth, windowHeight, topX, botY, brickWidth-2, brickHeight-2, Color.green);
 	}
 	
 	public void createBricks(int n) {
