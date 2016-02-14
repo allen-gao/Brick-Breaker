@@ -13,6 +13,9 @@ public class Ball {
 	// coordinates
 	public double topX;
 	public double topY;
+	// last coordinates
+	public double lastTopX;
+	public double lastTopY;
 	
 	public int width;
 	
@@ -95,6 +98,9 @@ public class Ball {
 		else if (collisionInt == 2) {
 			this.xSpeed = -this.xSpeed;
 		}
+		this.lastTopX = this.topX;
+		this.lastTopY = this.topY;
+		
 		this.topX += xSpeed;
 		this.topY -= ySpeed;
 	}
