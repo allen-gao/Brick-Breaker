@@ -10,9 +10,6 @@ public class GameLogic {
 	public int windowWidth;
 	public int windowHeight;
 	
-	public int brickWidth = 100;
-	public int brickHeight = 50;
-	
 	Ball ball;
 	public int ballWidth = 10;
 	
@@ -22,16 +19,23 @@ public class GameLogic {
 	public int paddleHeight = 10;
 	
 	ArrayList<Brick> bricks; // assume bricks are placed in sequence
+	public int brickWidth = 100;
+	public int brickHeight = 50;
+	
 	
 	GameLogic(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
-		addBall();
-		addPaddle();
+		this.ball = new Ball(windowWidth, windowHeight, 300, 300, ballWidth, Color.BLACK, bricks);
+		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.BLUE);
 	}
 	
 	public void paint(Graphics g) {
 		paddle.paintComponent(g);
+		for (int i = 0; i < bricks.size(); i++) {
+			Brick brick = bricks.get(i);
+			brick.paintComponent(g);
+		}
 	}
 	
 	public void handleMouseEvent(MouseEvent e) {
@@ -44,22 +48,15 @@ public class GameLogic {
 		paddle.setLocation(x, paddle.y);
 	}
 	
-	public void addBall() {
-		this.ball = new Ball(windowWidth, windowHeight, 300, 300, ballWidth, Color.BLACK, bricks);
-	}
-	
 	public void paintBall(Graphics g) {
 		g.setColor(ball.color);
 		g.fillOval((int)(ball.topX), (int)(ball.topY), ball.width, ball.width);
 	}
 	
-	public void addPaddle() {
-		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.BLUE);
-	}
-	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
 		int topX;
 		int topY;
+		boolean broken = false;
 		if (bricks.size() == 0) {
 			topX = 0;
 			topY = 0;
@@ -67,16 +64,16 @@ public class GameLogic {
 		else {
 			Brick lastBrick = bricks.get(bricks.size() - 1);
 			
-			if (lastBrick.topX + lastBrick.width >= this.windowWidth) {
+			if (lastBrick.x + lastBrick.width >= this.windowWidth) {
 				topX = 0;
-				topY = lastBrick.topY + this.brickHeight;
+				topY = lastBrick.y + this.brickHeight;
 			}
 			else {
-				topX = lastBrick.topX + this.brickWidth;
-				topY = lastBrick.topY;
+				topX = lastBrick.x + this.brickWidth;
+				topY = lastBrick.y;
 			}
 		}
-		return new Brick(windowWidth, windowHeight, topX, topY, brickWidth-2, brickHeight-2, Color.green);
+		return new Brick(topX, topY, brickWidth-2, brickHeight-2, Color.green, broken);
 	}
 	
 	public void createBricks(int n) {
@@ -85,16 +82,4 @@ public class GameLogic {
 			bricks.add(buildBrick(bricks));
 		}
 	}
-	
-	public void paintBricks(Graphics g) {
-		for (int i = 0; i < bricks.size(); i++) {
-			Brick brick = bricks.get(i);
-			if (!brick.broken) {
-				g.setColor(brick.color);
-				g.fillRect(brick.topX, brick.topY, brick.width, brick.height);
-			}
-			
-		}
-	}
-	
 }

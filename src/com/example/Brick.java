@@ -1,34 +1,27 @@
 package com.example;
 
 import java.awt.Color;
-import java.util.ArrayList;
+import java.awt.Graphics;
+import java.awt.Rectangle;
 
-public class Brick {
-	
-	public int windowWidth;
-	public int windowHeight;
-	
-	// coordinates
-	public int topX;
-	public int topY;
-	
-	public int width;
-	public int height;
+public class Brick extends Rectangle {
 	
 	public boolean broken;
 	
 	public Color color;
+
 	
-	Brick(int windowWidth, int windowHeight, int topX, int topY, int width, int height, Color color) {
-		this.windowWidth = windowWidth;
-		this.windowHeight = windowHeight;
-		
-		this.topX = topX;
-		this.topY = topY;
-		
-		this.width = width;
-		this.height = height;
+	Brick(int x, int y, int width, int height, Color color, boolean broken) {
+		super(x, y, width, height);
 		
 		this.color = color;
+		this.broken = broken;
+	}
+	
+	public void paintComponent(Graphics g) {
+		if (!this.broken) {
+			g.setColor(this.color);
+			g.fillRect(x, y, width-1, height-1);
+		}
 	}
 }
