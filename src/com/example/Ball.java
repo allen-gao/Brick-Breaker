@@ -8,6 +8,8 @@ public class Ball {
 	public int windowWidth;
 	public int windowHeight;
 	
+	public ArrayList<Brick> bricks;
+	
 	// coordinates
 	public double topX;
 	public double topY;
@@ -20,7 +22,7 @@ public class Ball {
 	public double xSpeed;
 	public double ySpeed;
 	
-	Ball(int windowWidth, int windowHeight, double topX, double topY, int width, Color color) {
+	Ball(int windowWidth, int windowHeight, double topX, double topY, int width, Color color, ArrayList<Brick> bricks) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		
@@ -31,13 +33,21 @@ public class Ball {
 		
 		this.color = color;
 		
-		xSpeed = 10;
-		ySpeed = 10;
+		this.bricks = bricks;
+		
+		xSpeed = 3;
+		ySpeed = 3;
 	}
 	
 	// returns 0 if no collision, 1 if horizontal collision, 2 if vertical collision,
 	// 3 if bottom y collision (game over)
-	public int hasCollision() {
+	public int hasCollision(int paddleXPos, int paddleYPos, int paddleWidth, int paddleHeight) {
+		if (brickCollision(this.bricks)) {
+			return 1;
+		}
+		if (paddleCollision(paddleXPos, paddleYPos, paddleWidth, paddleHeight)) {
+			return 1;
+		}
 		if (this.topX < 0) {
 			this.topX = 0;
 			return 2;
@@ -56,7 +66,29 @@ public class Ball {
 			return 0;
 	}
 	
-	public void setNewPosition(int collisionInt) { 
+	public boolean brickCollision(ArrayList<Brick> bricks) {
+		for (int i = 0; i < bricks.size(); i++) {
+			Brick brick = bricks.get(i);
+			if (this.topY >= brick.topY && this.topY <= brick.topY + brick.height && !brick.broken) {
+				if (this.topX >= brick.width && this.topX <= brick.topX + brick.width) {
+					brick.broken = true;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean paddleCollision(int paddleXPos, int paddleYPos, int paddleWidth, int paddleHeight) {
+		if (this.topY + width > paddleYPos && this.topY + width < paddleYPos + paddleHeight) { // ball inside paddle (on y axis)
+			if (this.topX >= paddleXPos && this.topX <= paddleXPos + paddleWidth) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void setNewPosition(int collisionInt) {
 		if (collisionInt == 1 || collisionInt == 3) {
 			this.ySpeed = -this.ySpeed;
 		}

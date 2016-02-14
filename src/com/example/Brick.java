@@ -10,7 +10,7 @@ public class Brick {
 	
 	// coordinates
 	public int topX;
-	public int botY;
+	public int topY;
 	
 	public int width;
 	public int height;
@@ -19,12 +19,12 @@ public class Brick {
 	
 	public Color color;
 	
-	Brick(int windowWidth, int windowHeight, int topX, int botY, int width, int height, Color color) {
+	Brick(int windowWidth, int windowHeight, int topX, int topY, int width, int height, Color color) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
 		
 		this.topX = topX;
-		this.botY = botY;
+		this.topY = topY;
 		
 		this.width = width;
 		this.height = height;

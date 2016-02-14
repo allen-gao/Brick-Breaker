@@ -57,11 +57,11 @@ public class GameWindow extends JPanel {
 	}
 	
 	public void runEvents() {
-		int delay = 30; //milliseconds
+		int delay = 10; //milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				repaint();
-				int collisionInt = gameLogic.ball.hasCollision();
+				int collisionInt = gameLogic.ball.hasCollision(paddleXPos, paddleYPos, paddleWidth, paddleHeight);
 				gameLogic.ball.setNewPosition(collisionInt);
 			}
 		};
