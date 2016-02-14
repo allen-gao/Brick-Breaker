@@ -2,6 +2,7 @@ package com.example;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class GameLogic {
@@ -12,15 +13,35 @@ public class GameLogic {
 	public int brickWidth = 100;
 	public int brickHeight = 50;
 	
+	Ball ball;
 	public int ballWidth = 10;
 	
-	Ball ball;
+	Paddle paddle;
+	public int paddleYOffset = 100;
+	public int paddleWidth = 80;
+	public int paddleHeight = 10;
 	
 	ArrayList<Brick> bricks; // assume bricks are placed in sequence
 	
 	GameLogic(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
+		addBall();
+		addPaddle();
+	}
+	
+	public void paint(Graphics g) {
+		paddle.paintComponent(g);
+	}
+	
+	public void handleMouseEvent(MouseEvent e) {
+		int x = e.getX();
+		if (x > windowWidth - paddle.width/2)
+			x = windowWidth - paddle.width/2;
+		if (x < paddle.width/2)
+			x = paddle.width/2;
+		x -= paddle.width/2;
+		paddle.setLocation(x, paddle.y);
 	}
 	
 	public void addBall() {
@@ -30,6 +51,10 @@ public class GameLogic {
 	public void paintBall(Graphics g) {
 		g.setColor(ball.color);
 		g.fillOval((int)(ball.topX), (int)(ball.topY), ball.width, ball.width);
+	}
+	
+	public void addPaddle() {
+		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.BLUE);
 	}
 	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
