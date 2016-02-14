@@ -38,15 +38,16 @@ public class Ball {
 		
 		this.bricks = bricks;
 		
-		xSpeed = 3;
-		ySpeed = 3;
+		xSpeed = 1;
+		ySpeed = 1;
 	}
 	
 	// returns 0 if no collision, 1 if horizontal collision, 2 if vertical collision,
 	// 3 if bottom y collision (game over)
 	public int hasCollision(int paddleXPos, int paddleYPos, int paddleWidth, int paddleHeight) {
-		if (brickCollision(this.bricks)) {
-			return 1;
+		int brickCollisionInt = brickCollision(this.bricks);
+		if (brickCollisionInt != 0) {
+			return brickCollisionInt;
 		}
 		if (paddleCollision(paddleXPos, paddleYPos, paddleWidth, paddleHeight)) {
 			return 1;
@@ -69,22 +70,29 @@ public class Ball {
 			return 0;
 	}
 	
-	public boolean brickCollision(ArrayList<Brick> bricks) {
+	public int brickCollision(ArrayList<Brick> bricks) {
 		for (int i = 0; i < bricks.size(); i++) {
 			Brick brick = bricks.get(i);
-			if (this.topY >= brick.topY && this.topY <= brick.topY + brick.height && !brick.broken) {
-				if (this.topX >= brick.width && this.topX <= brick.topX + brick.width) {
-					brick.broken = true;
-					return true;
+			if (this.topY + this.width >= brick.topY && this.topY <= brick.topY + brick.height && !brick.broken) {
+				if (this.topX + this.width >= brick.topX && this.topX <= brick.topX + brick.width) {
+					LinearEq linearEq = new LinearEq(this.lastTopX, this.lastTopY, this.topX, this.topY, this);
+					int collisionInt = linearEq.ballIntersectsRect(brick.topX, brick.topY, brick.width, brick.height);
+					System.out.println(collisionInt);
+					if (collisionInt == 1) {
+						brick.broken = true;
+						return collisionInt;
+					}
+					
 				}
 			}
 		}
-		return false;
+		return 0;
 	}
 	
 	public boolean paddleCollision(int paddleXPos, int paddleYPos, int paddleWidth, int paddleHeight) {
 		if (this.topY + width > paddleYPos && this.topY + width < paddleYPos + paddleHeight) { // ball inside paddle (on y axis)
 			if (this.topX >= paddleXPos && this.topX <= paddleXPos + paddleWidth) {
+				this.topY = paddleYPos - width;
 				return true;
 			}
 		}

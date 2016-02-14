@@ -7,15 +7,18 @@ public class LinearEq {
 	public boolean xPositive;
 	public boolean yPositive;
 	
-	public LinearEq(double x1, double y1, double x2, double y2) {
+	Ball ball;
+	
+	public LinearEq(double x1, double y1, double x2, double y2, Ball ball) {
 		this.m = (y2 - y1) / (x2 - x1);
 		this.b = y2 - (m * x2);
 		this.yPositive = y2 >= y1;
 		this.xPositive = x2 >= x1;
+		this.ball = ball;
 	}
 	
 	// exactly 1 of height or width must be 0
-	public boolean intersectsLine(double posX, double posY, double height, double width) {
+	public boolean intersectsLine(double posX, double posY, double width, double height) {
 		double y;
 		double x;
 		if (height != 0) {
@@ -38,6 +41,23 @@ public class LinearEq {
 				return false;
 			}
 		}
+	}
+	
+	public int ballIntersectsRect(double posX, double posY, double width, double height) {
+		int result = intersectsRect(posX, posY, width, height);
+		if (result != 0) {
+			return result;
+		}
+		result = intersectsRect(posX + ball.width, posY, width, height);
+		if (result != 0) {
+			return result;
+		}
+		result = intersectsRect(posX, posY + ball.width, width, height);
+		if (result != 0) {
+			return result;
+		}
+		result = intersectsRect(posX + ball.width, posY + ball.width, width, height);
+		return result;
 	}
 	
 	// return 0 if no intersection, 1 if horizontal intersect, 2 if vertical
@@ -65,7 +85,7 @@ public class LinearEq {
 		if (intersectsLine(newPosX, newPosY, 0, height)) {
 			return 2;
 		}
-		if (intersectsLine(posX, posY, width, 0)) {
+		if (intersectsLine(newPosX, newPosY, width, 0)) {
 			return 1;
 		}
 		return 0;

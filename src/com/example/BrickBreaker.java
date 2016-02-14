@@ -11,7 +11,7 @@ public class BrickBreaker extends JFrame {
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int numBricks = 20;
+	public static int numBricks = 30;
 	
 	public BrickBreaker() {
 		super();

@@ -57,7 +57,7 @@ public class GameWindow extends JPanel {
 	}
 	
 	public void runEvents() {
-		int delay = 10; //milliseconds
+		int delay = 5; //milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				repaint();

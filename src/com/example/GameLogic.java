@@ -10,7 +10,7 @@ public class GameLogic {
 	public int windowHeight;
 	
 	public int brickWidth = 100;
-	public int brickHeight = 30;
+	public int brickHeight = 50;
 	
 	public int ballWidth = 10;
 	
