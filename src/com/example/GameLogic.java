@@ -24,12 +24,12 @@ public class GameLogic {
 	}
 	
 	public void addBall() {
-		this.ball = new Ball(windowWidth, windowHeight, 0, 0, ballWidth, Color.BLACK);
+		this.ball = new Ball(windowWidth, windowHeight, 300, 300, ballWidth, Color.BLACK);
 	}
 	
 	public void paintBall(Graphics g) {
 		g.setColor(ball.color);
-		g.fillOval(ball.topX, ball.topY, ball.width, ball.width);
+		g.fillOval((int)(ball.topX), (int)(ball.topY), ball.width, ball.width);
 	}
 	
 	public Brick buildBrick(ArrayList<Brick> bricks) {

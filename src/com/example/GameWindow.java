@@ -61,6 +61,8 @@ public class GameWindow extends JPanel {
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				repaint();
+				int collisionInt = gameLogic.ball.hasCollision();
+				gameLogic.ball.setNewPosition(collisionInt);
 			}
 		};
 		new Timer(delay, taskPerformer).start();
