@@ -154,6 +154,10 @@ public class GameWindow extends JPanel {
 	    	public void mouseClicked(MouseEvent e) {
 	    		setSplashButtons(false);
 	    		gameScreen = true;
+	    		if (paused) {
+	    			runEvents();
+	    			paused = false;
+	    		}
 	    	}
 	    });
 	    this.add(play);
@@ -257,8 +261,6 @@ public class GameWindow extends JPanel {
 		Rectangle bounds = this.getBounds();
 		this.width = (int)bounds.getWidth();
 		this.height = (int)bounds.getHeight();
-		System.out.println(width);
-		System.out.println(height);
 		collisionCheatOn.setLocation(width/2 + 30, 311);
 		collisionCheatOff.setLocation(width/2 + 80, 311);
 		infiniteLivesOn.setLocation(width/2 + 30, 342);

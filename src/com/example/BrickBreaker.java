@@ -53,7 +53,6 @@ public class BrickBreaker extends JFrame {
 				frame.setMinimumSize(new Dimension(500, 550));
 				frame.addComponentListener(new ComponentAdapter() {
 					public void componentResized(ComponentEvent e) {
-						System.out.println("resized");
 						gameWindow.resizeWindow();
 					}
 				});
