@@ -14,7 +14,6 @@ public class BrickBreaker extends JFrame {
 	public static int frameRate = 30;
 	public static int ballSpeed = 5;
 	
-	public static int numBricks = 75;
 	
 	public BrickBreaker() {
 		super();
@@ -47,7 +46,6 @@ public class BrickBreaker extends JFrame {
 				frame.add(gameWindow);
 				gameWindow.runEvents();
 				gameWindow.repaintWithFrameRate(frameRate);
-				gameWindow.gameLogic.createBricks(numBricks);
 			}
 		});
 	}

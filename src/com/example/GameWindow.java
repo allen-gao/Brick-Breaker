@@ -7,6 +7,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -24,6 +26,8 @@ public class GameWindow extends JPanel {
 	
 	public int frameRate;
 	public int ballSpeed;
+	
+	public int highscore;
 	
 	public boolean gameScreen = false;
 	
@@ -57,6 +61,16 @@ public class GameWindow extends JPanel {
 		};
 		this.addMouseListener(mouseAdapter);
 		this.addMouseMotionListener(mouseAdapter);
+		
+		this.setFocusable(true);
+		this.requestFocus();
+		this.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent ke) {
+				if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					System.exit(0);
+				}
+			}
+		});
 		
 		this.setLayout(null);
 		
@@ -170,6 +184,10 @@ public class GameWindow extends JPanel {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 		drawCenterString(g, "Bounce on bottom screen:", 330, -60);
 		drawCenterString(g, "Infinite lives:", 360, -20);
+		
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		String scoreString = "Highscore: " + this.highscore;
+		g.drawString(scoreString, 30, height - 70);
 	}
 	
 	public void setSplashButtons(boolean on) {

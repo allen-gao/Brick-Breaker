@@ -1,6 +1,7 @@
 package com.example;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -27,6 +28,7 @@ public class GameLogic {
 	public int brickWidth;
 	public int brickHeight;
 	ArrayList<Color> colorArray;
+	public int numBricks = 75;
 	
 	public boolean aimPhase = true;
 	public Point aimPoint;
@@ -38,6 +40,8 @@ public class GameLogic {
 	boolean bottomCollision = false;
 	int lives;
 	boolean infiniteLives = false;
+	
+	int score;
 	
 	
 	GameLogic(int windowWidth, int windowHeight, GameWindow gameWindow) {
@@ -59,7 +63,13 @@ public class GameLogic {
 		colorArray.add(Color.MAGENTA);
 		
 		this.aimPoint = new Point(0, 0);
+		setDefaults();
+	}
+	
+	public void setDefaults() {
 		this.lives = 3;
+		this.score = 0;
+		createBricks(this.numBricks);
 	}
 	
 	public void runGame() {
@@ -75,6 +85,7 @@ public class GameLogic {
 		ball.paintComponent(g);
 		paintAimPoint(g);
 		paintLives(g);
+		paintScore(g);
 	}
 	
 	public void paintBricks(Graphics g) {
@@ -100,7 +111,7 @@ public class GameLogic {
 	}
 	
 	public void handleMouseClickEvent(MouseEvent e) {
-		if (aimPhase) {
+		if (aimPhase && gameWindow.gameScreen) {
 			aimPhase = false;
 			ball.xSpeed = this.dirX*2;
 			ball.ySpeed = this.dirY*2;
@@ -130,6 +141,13 @@ public class GameLogic {
 		}
 	}
 	
+	public void paintScore(Graphics g) {
+		String scoreString = "Score: " + this.score;
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString(scoreString, 110, windowHeight - 58);
+	}
+	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
 		int topX;
 		int topY;
@@ -144,7 +162,7 @@ public class GameLogic {
 		else {
 			Brick lastBrick = bricks.get(bricks.size() - 1);
 			
-			if (lastBrick.x + lastBrick.width >= this.windowWidth) {
+			if (lastBrick.x + 2*(lastBrick.width) >= this.windowWidth) {
 				topX = 0;
 				topY = lastBrick.y + this.brickHeight;
 				color = colorArray.get(0);
@@ -185,9 +203,7 @@ public class GameLogic {
 				else {
 					lives -= 1;
 					if (lives == 0) {
-						gameWindow.gameScreen = true;
-						gameWindow.paintComponent(gameWindow.g);
-						gameWindow.setSplashButtons(true);
+						endGame();
 					}
 					else {
 						this.aimPhase = true;
@@ -235,6 +251,8 @@ public class GameLogic {
 			Brick brick = bricks.get(i);
 			if (!brick.broken && ball.intersects(brick)) {
 				brick.broken = true;
+				this.score += 10;
+				checkGameOver();
 				int myint = brickCollisionType(brick);
 				return myint;
 			}
@@ -293,9 +311,29 @@ public class GameLogic {
 			return 0;
 	}
 	
+	public void checkGameOver() {
+		for (int i = 0; i < bricks.size(); i++) {
+			if (!bricks.get(i).broken)
+				return;
+		}
+		endGame();
+	}
+	
 	public void setDefaultLocation() {
 		this.paddle.setLocation(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset);
 		this.ball.setFrame(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ball.length, ball.length);
 	}
+	
+	public void endGame() {
+		if (this.gameWindow.highscore < this.score) {
+			this.gameWindow.highscore = this.score;
+		}
+		this.gameWindow.gameScreen = false;
+		this.gameWindow.setSplashButtons(true);
+		this.aimPhase = true;
+		setDefaultLocation();
+		setDefaults();
+	}
+	
 	
 }
