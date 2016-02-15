@@ -188,7 +188,7 @@ public class GameWindow extends JPanel {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 		drawCenterString(g, "Use the mouse to aim where you want the ball to shoot.", 130, 0);
 		drawCenterString(g, "Once you're ready, simply left click and start playing!", 150, 0);
-		drawCenterString(g, "Break the rainbow break for a special random powerup!", 170, 0);
+		drawCenterString(g, "Break the rainbow brick for a special powerup!", 170, 0);
 		drawCenterString(g, "Press esc to exit back to this menu and P to pause the game.", 210, 0);
 		
 		drawCenterString(g, "You have 3 lives to try and get the highest score possible.", 230, 0);

@@ -418,14 +418,9 @@ public class GameLogic {
 	}
 	
 	public void getPowerup() {
-		int powerup = (int)(Math.floor(Math.random() * 2));
-		if (powerup == 0) {
-			this.lives += 1;
-		}
-		else {
-			this.paddlePowerup = true;
-			this.paddle.color = Color.RED;
-			this.paddle.width = this.windowWidth / 5;
-		}
+		this.lives += 1;
+		this.paddlePowerup = true;
+		this.paddle.color = Color.RED;
+		this.paddle.width = this.windowWidth / 5;
 	}
 }
