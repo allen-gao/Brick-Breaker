@@ -13,8 +13,8 @@ public class GameLogic {
 	
 	Ball ball;
 	public int ballLength = 10;
-	public double ballXSpeed = 2;
-	public double ballYSpeed = 2;
+	public double ballXSpeed = 1;
+	public double ballYSpeed = 1;
 	
 	Paddle paddle;
 	public int paddleYOffset = 100;
@@ -22,15 +22,24 @@ public class GameLogic {
 	public int paddleHeight = 10;
 	
 	ArrayList<Brick> bricks; // assume bricks are placed in sequence
-	public int brickWidth = 100;
-	public int brickHeight = 50;
+	public int brickWidth;
+	public int brickHeight;
+	ArrayList<Color> colorArray;
 	
 	
 	GameLogic(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
-		this.ball = new Ball(300, 300, ballLength, ballXSpeed, ballYSpeed, Color.BLACK);
-		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.BLUE);
+		this.ball = new Ball(300, 300, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
+		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
+		brickWidth = windowWidth / 15;
+		brickHeight = brickWidth / 2;
+		colorArray = new ArrayList<Color>();
+		colorArray.add(Color.RED);
+		colorArray.add(Color.ORANGE);
+		colorArray.add(Color.YELLOW); 
+		colorArray.add(Color.GREEN);
+		colorArray.add(Color.MAGENTA);
 	}
 	
 	public void paint(Graphics g) {
@@ -60,9 +69,12 @@ public class GameLogic {
 		int topX;
 		int topY;
 		boolean broken = false;
+		Color color;
 		if (bricks.size() == 0) {
 			topX = 0;
 			topY = 0;
+			color = colorArray.get(0);
+			colorArray.add(colorArray.remove(0));
 		}
 		else {
 			Brick lastBrick = bricks.get(bricks.size() - 1);
@@ -70,13 +82,19 @@ public class GameLogic {
 			if (lastBrick.x + lastBrick.width >= this.windowWidth) {
 				topX = 0;
 				topY = lastBrick.y + this.brickHeight;
+				color = colorArray.get(0);
+				colorArray.add(colorArray.remove(0));
 			}
 			else {
 				topX = lastBrick.x + this.brickWidth;
 				topY = lastBrick.y;
+				color = lastBrick.color;
 			}
 		}
-		return new Brick(topX, topY, brickWidth-2, brickHeight-2, Color.green, broken);
+		if ((int)Math.floor(Math.random() * 5) == 1) {
+			broken = true;
+		}
+		return new Brick(topX, topY, brickWidth-2, brickHeight-2, color, broken);
 	}
 	
 	public void createBricks(int n) {
@@ -114,8 +132,10 @@ public class GameLogic {
 	}
 	
 	public int paddleCollision() {
-		if (ball.intersects(paddle))
+		if (ball.intersects(paddle)) {
+			ball.y = paddle.y - paddle.height;
 			return 1;
+		}
 		return 0;
 	}
 	

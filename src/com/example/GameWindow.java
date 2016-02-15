@@ -16,13 +16,18 @@ public class GameWindow extends JPanel {
 	public int height;
 	public int width;
 	
+	public int frameRate;
+	public int ballSpeed;
+	
 	GameLogic gameLogic;
 
-	public GameWindow(int width, int height) {
+	public GameWindow(int width, int height, int frameRate, int ballSpeed) {
 		this.width = width;
 		this.height = height;
-		this.setBackground(Color.WHITE);
+		this.frameRate = frameRate;
+		this.ballSpeed = ballSpeed;
 		
+		this.setBackground(Color.BLACK);
 		this.gameLogic = new GameLogic(width, height);
 		
 		this.addMouseMotionListener(new MouseAdapter() {
@@ -37,11 +42,20 @@ public class GameWindow extends JPanel {
 		gameLogic.paint(g);
 	}
 	
-	public void runEvents() {
-		int delay = 5; //milliseconds
+	public void repaintWithFrameRate(int frameRate) {
+		int delay = (int)(1000 / frameRate); //milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				repaint();
+			}
+		};
+		new Timer(delay, taskPerformer).start();
+	}
+	
+	public void runEvents() {
+		int delay = this.ballSpeed; //milliseconds
+		ActionListener taskPerformer = new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
 				int collisionInt = gameLogic.hasCollision();
 				gameLogic.moveBall(collisionInt);
 			}

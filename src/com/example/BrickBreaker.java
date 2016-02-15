@@ -11,7 +11,10 @@ public class BrickBreaker extends JFrame {
 	public static int width = 800;
 	public static int height = 600;
 	
-	public static int numBricks = 30;
+	public static int frameRate = 30;
+	public static int ballSpeed = 5;
+	
+	public static int numBricks = 75;
 	
 	public BrickBreaker() {
 		super();
@@ -24,13 +27,26 @@ public class BrickBreaker extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		if (args.length > 1) {
+			ballSpeed = Integer.parseInt(args[1]);
+			if (ballSpeed > 10 || ballSpeed < 1) {
+				ballSpeed = 5;
+			}
+			else {
+				ballSpeed = 11 - ballSpeed;
+			}
+		}
+		if (args.length > 0) {
+			frameRate = Integer.parseInt(args[0]);
+		}
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				BrickBreaker frame = new BrickBreaker();
 				
-				gameWindow = new GameWindow(width, height);
+				gameWindow = new GameWindow(width, height, frameRate, ballSpeed);
 				frame.add(gameWindow);
 				gameWindow.runEvents();
+				gameWindow.repaintWithFrameRate(frameRate);
 				gameWindow.gameLogic.createBricks(numBricks);
 			}
 		});
