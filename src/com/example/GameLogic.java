@@ -11,6 +11,7 @@ public class GameLogic {
 	
 	public int windowWidth;
 	public int windowHeight;
+	public GameWindow gameWindow;
 	
 	Ball ball;
 	public int ballLength = 10;
@@ -35,11 +36,14 @@ public class GameLogic {
 	double aimLineY;
 	
 	boolean bottomCollision = false;
+	int lives;
+	boolean infiniteLives = false;
 	
 	
-	GameLogic(int windowWidth, int windowHeight) {
+	GameLogic(int windowWidth, int windowHeight, GameWindow gameWindow) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
+		this.gameWindow = gameWindow;
 		
 		this.paddle = new Paddle(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
 		this.ball = new Ball(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
@@ -55,6 +59,7 @@ public class GameLogic {
 		colorArray.add(Color.MAGENTA);
 		
 		this.aimPoint = new Point(0, 0);
+		this.lives = 3;
 	}
 	
 	public void runGame() {
@@ -69,6 +74,7 @@ public class GameLogic {
 		paintBricks(g);
 		ball.paintComponent(g);
 		paintAimPoint(g);
+		paintLives(g);
 	}
 	
 	public void paintBricks(Graphics g) {
@@ -111,6 +117,16 @@ public class GameLogic {
 			this.aimLineX = this.dirX * 90;
 			this.aimLineY = this.dirY * 90;
 			g.drawLine((int)(ball.getCenterX()), (int)(ball.getCenterY()), (int)(ball.getCenterX() + this.aimLineX), (int)(ball.getCenterY() + this.aimLineY));
+		}
+	}
+	
+	public void paintLives(Graphics g) {
+		int xOffset = 30;
+		int yOffset = windowHeight - 70;
+		g.setColor(Color.WHITE);
+		for (int i = 0; i < this.lives; i++) {
+			g.fillOval(xOffset, yOffset, ballLength, ballLength);
+			xOffset += ballLength * 2;
 		}
 	}
 	
@@ -162,8 +178,24 @@ public class GameLogic {
 				ball.ySpeed = -ball.ySpeed;
 			}
 			else {
-				this.aimPhase = true;
-				setDefaultLocation();
+				if (this.infiniteLives) {
+					this.aimPhase = true;
+					setDefaultLocation();
+				}
+				else {
+					lives -= 1;
+					if (lives == 0) {
+						gameWindow.gameScreen = true;
+						gameWindow.paintComponent(gameWindow.g);
+						gameWindow.setSplashButtons(true);
+					}
+					else {
+						this.aimPhase = true;
+						setDefaultLocation();
+					}
+					
+				}
+				
 			}
 			
 		}

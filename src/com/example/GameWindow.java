@@ -36,6 +36,8 @@ public class GameWindow extends JPanel {
 	Button play;
 	Button quit;
 	
+	Graphics g;
+	
 
 	public GameWindow(int width, int height, int frameRate, int ballSpeed) {
 		this.width = width;
@@ -44,7 +46,7 @@ public class GameWindow extends JPanel {
 		this.ballSpeed = ballSpeed;
 		
 		this.setBackground(Color.BLACK);
-		this.gameLogic = new GameLogic(width, height);
+		this.gameLogic = new GameLogic(width, height, this);
 		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseMoved(MouseEvent e) {
 				gameLogic.handleMouseMoveEvent(e);
@@ -89,9 +91,19 @@ public class GameWindow extends JPanel {
 	    infiniteLivesOn.setBounds(width/2 + 30, 342, 50, 30);
 	    infiniteLivesOn.setBackground(Color.BLACK);
 	    infiniteLivesOn.setForeground(Color.WHITE);
+	    infiniteLivesOn.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		gameLogic.infiniteLives = true;
+	    	}
+	    });
 	    infiniteLivesOff.setBounds(width/2 + 80, 342, 50, 30);
 	    infiniteLivesOff.setBackground(Color.BLACK);
 	    infiniteLivesOff.setForeground(Color.WHITE);
+	    infiniteLivesOff.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		gameLogic.infiniteLives = false;
+	    	}
+	    });
 	    
 	    ButtonGroup buttonGroup2 = new ButtonGroup();
 	    buttonGroup2.add(infiniteLivesOn);
@@ -129,6 +141,7 @@ public class GameWindow extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
+		this.g = g;
 		super.paintComponent(g); // clear the previous paint
 		if (gameScreen) {
 			gameLogic.paint(g);
