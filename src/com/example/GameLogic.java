@@ -49,6 +49,9 @@ public class GameLogic {
 		this.windowHeight = windowHeight;
 		this.gameWindow = gameWindow;
 		
+		this.paddleWidth = this.windowWidth / 10;
+		this.paddleYOffset = this.windowHeight / 6;
+		
 		this.paddle = new Paddle(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
 		this.ball = new Ball(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
 		
@@ -209,11 +212,8 @@ public class GameLogic {
 						this.aimPhase = true;
 						setDefaultLocation();
 					}
-					
 				}
-				
 			}
-			
 		}
 		else if (collisionInt == 2) {
 			ball.xSpeed = -ball.xSpeed;
@@ -263,7 +263,7 @@ public class GameLogic {
 	public int brickCollisionType(Brick brick) {
 		// assuming collision exists
 		// utilizing the Minkowski sum
-		// source: http://gamedev.stackexchange.com/questions/29786/a-simple-2d-rectangle-collision-algorithm-that-also-determines-which-sides-that
+		// referencing: http://gamedev.stackexchange.com/questions/29786/a-simple-2d-rectangle-collision-algorithm-that-also-determines-which-sides-that
 		double width = 0.5 * (ball.length + brick.width);
 		double height = 0.5 * (ball.length + brick.height);
 		double xDistance = ball.getCenterX() - brick.getCenterX();
@@ -335,5 +335,53 @@ public class GameLogic {
 		setDefaults();
 	}
 	
+	public void resizeGame(int x, int y) {
+		this.windowWidth = x;
+		this.windowHeight = y;
+		this.brickWidth = windowWidth / 15;
+		this.brickHeight = this.brickWidth / 2;
+		resizeBricks(this.bricks);
+		resizePaddle();
+	}
+	
+	public void resizeBricks(ArrayList<Brick> bricks) {
+		int width = this.windowWidth / 15;
+		int height = width / 2;
+		int topX;
+		int topY;
+		for (int i = 0; i < bricks.size(); i++) {
+			Brick brick = bricks.get(i);
+			if (i == 0) {
+				topX = 0;
+				topY = 0;
+			}
+			else {
+				Brick lastBrick = bricks.get(i - 1);
+				
+				if (lastBrick.x + 2*(lastBrick.width) >= this.windowWidth) {
+					topX = 0;
+					topY = lastBrick.y + height;
+				}
+				else {
+					topX = lastBrick.x + width;
+					topY = lastBrick.y;
+				}
+			}
+			brick.x = topX;
+			brick.y = topY;
+			brick.width = width;
+			brick.height = height;
+		}
+	}
+	
+	public void resizePaddle() {
+		double paddleWidth = this.windowWidth / 10;
+		double paddleYOffset = this.windowHeight / 6;
+		
+		paddle.width = (int)paddleWidth;
+		paddle.height = (int)paddleHeight;
+		paddle.x = (int)(windowWidth/2 - paddleWidth/2);
+		paddle.y = (int)(this.windowHeight - paddleYOffset);
+	}
 	
 }

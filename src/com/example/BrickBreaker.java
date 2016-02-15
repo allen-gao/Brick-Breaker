@@ -1,6 +1,10 @@
 package com.example;
 
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -46,6 +50,13 @@ public class BrickBreaker extends JFrame {
 				frame.add(gameWindow);
 				gameWindow.runEvents();
 				gameWindow.repaintWithFrameRate(frameRate);
+				frame.setMinimumSize(new Dimension(500, 550));
+				frame.addComponentListener(new ComponentAdapter() {
+					public void componentResized(ComponentEvent e) {
+						System.out.println("resized");
+						gameWindow.resizeWindow();
+					}
+				});
 			}
 		});
 	}

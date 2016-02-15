@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -187,7 +188,7 @@ public class GameWindow extends JPanel {
 		
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		String scoreString = "Highscore: " + this.highscore;
-		g.drawString(scoreString, 30, height - 70);
+		g.drawString(scoreString, 30, height - 25);
 	}
 	
 	public void setSplashButtons(boolean on) {
@@ -225,5 +226,23 @@ public class GameWindow extends JPanel {
 			}
 		};
 		new Timer(delay, taskPerformer).start();
+	}
+	
+	public void resizeWindow() {
+		Rectangle bounds = this.getBounds();
+		this.width = (int)bounds.getWidth();
+		this.height = (int)bounds.getHeight();
+		System.out.println(width);
+		System.out.println(height);
+		collisionCheatOn.setLocation(width/2 + 30, 311);
+		collisionCheatOff.setLocation(width/2 + 80, 311);
+		infiniteLivesOn.setLocation(width/2 + 30, 342);
+		infiniteLivesOff.setLocation(width/2 + 80, 342);
+		play.setLocation(width/2 - 110, 400);
+		quit.setLocation(width/2 + 40, 400);
+		
+		gameLogic.resizeGame(width, height);
+		
+		repaint();
 	}
 }
