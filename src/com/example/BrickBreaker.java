@@ -23,7 +23,7 @@ public class BrickBreaker extends JFrame {
 		this.getContentPane().setLayout(new GridLayout());
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setResizable(false);
+		this.setResizable(true);
 	}
 
 	public static void main(String[] args) {
