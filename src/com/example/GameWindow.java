@@ -43,6 +43,9 @@ public class GameWindow extends JPanel {
 	
 	Graphics g;
 	
+	Timer eventsTimer;
+	public boolean paused = false;
+	
 
 	public GameWindow(int width, int height, int frameRate, int ballSpeed) {
 		this.width = width;
@@ -68,7 +71,16 @@ public class GameWindow extends JPanel {
 		this.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent ke) {
 				if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
-					System.exit(0);
+					gameLogic.endGame();
+				}
+				if (ke.getKeyCode() == KeyEvent.VK_P) {
+					if (!paused) {
+						stopEvents();
+					}
+					else {
+						runEvents();
+					}
+					paused = !paused;
 				}
 			}
 		});
@@ -225,7 +237,12 @@ public class GameWindow extends JPanel {
 				gameLogic.runGame();
 			}
 		};
-		new Timer(delay, taskPerformer).start();
+		eventsTimer = new Timer(delay, taskPerformer);
+		eventsTimer.start();
+	}
+	
+	public void stopEvents() {
+		eventsTimer.stop();
 	}
 	
 	public void resizeWindow() {
