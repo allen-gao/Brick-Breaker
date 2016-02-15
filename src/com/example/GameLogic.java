@@ -74,6 +74,10 @@ public class GameLogic {
 	public void setDefaults() {
 		this.lives = 3;
 		this.score = 0;
+		this.paddlePowerup = false;
+		this.paddle.color = Color.GRAY;
+		this.paddle.width = this.windowWidth / 10;
+		paddle.width = (int)paddleWidth;
 		createBricks(this.numBricks);
 	}
 	
@@ -351,8 +355,8 @@ public class GameLogic {
 		this.gameWindow.gameScreen = false;
 		this.gameWindow.setSplashButtons(true);
 		this.aimPhase = true;
-		setDefaultLocation();
 		setDefaults();
+		setDefaultLocation();
 	}
 	
 	public void resizeGame(int x, int y) {
