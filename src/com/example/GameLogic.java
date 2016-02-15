@@ -23,11 +23,13 @@ public class GameLogic {
 	public int paddleYOffset = 100;
 	public int paddleWidth = 80;
 	public int paddleHeight = 10;
+	public Color paddleColor = Color.GRAY;
+	public boolean paddlePowerup = false;
 	
 	ArrayList<Brick> bricks; // assume bricks are placed in sequence
 	public int brickWidth;
 	public int brickHeight;
-	ArrayList<Color> colorArray;
+	public ArrayList<Color> colorArray;
 	public int numBricks = 75;
 	
 	public boolean aimPhase = true;
@@ -52,7 +54,7 @@ public class GameLogic {
 		this.paddleWidth = this.windowWidth / 10;
 		this.paddleYOffset = this.windowHeight / 6;
 		
-		this.paddle = new Paddle(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
+		this.paddle = new Paddle(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset, paddleWidth, paddleHeight, paddleColor);
 		this.ball = new Ball(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
 		
 		brickWidth = windowWidth / 15;
@@ -94,7 +96,7 @@ public class GameLogic {
 	public void paintBricks(Graphics g) {
 		for (int i = 0; i < bricks.size(); i++) {
 			Brick brick = bricks.get(i);
-			brick.paintComponent(g);
+			brick.paintComponent(g, colorArray);
 		}
 	}
 	
@@ -180,13 +182,28 @@ public class GameLogic {
 		if ((int)Math.floor(Math.random() * 5) == 1) {
 			broken = true;
 		}
-		return new Brick(topX, topY, brickWidth-2, brickHeight-2, color, broken);
+		return new Brick(topX, topY, brickWidth, brickHeight, color, broken);
 	}
 	
 	public void createBricks(int n) {
 		bricks = new ArrayList<Brick>();
 		for (int i = 0; i < n; i++) {
 			bricks.add(buildBrick(bricks));
+		}
+		setSpecialBrick();
+	}
+	
+	public void setSpecialBrick() {
+		int specialInt;
+		while (true) {
+			specialInt = (int)(Math.floor(Math.random() * 75));
+			if (bricks.get(specialInt).broken) {
+				continue;
+			}
+			else {
+				bricks.get(specialInt).color = null;
+				break;
+			}
 		}
 	}
 	
@@ -250,6 +267,9 @@ public class GameLogic {
 		for (int i = 0; i < bricks.size(); i++) {
 			Brick brick = bricks.get(i);
 			if (!brick.broken && ball.intersects(brick)) {
+				if (brick.color == null) {
+					getPowerup();
+				}
 				brick.broken = true;
 				this.score += 10;
 				checkGameOver();
@@ -377,6 +397,9 @@ public class GameLogic {
 	
 	public void resizePaddle() {
 		double paddleWidth = this.windowWidth / 10;
+		if (paddlePowerup) {
+			paddleWidth = this.windowWidth / 5;
+		}
 		double paddleYOffset = this.windowHeight / 6;
 		
 		paddle.width = (int)paddleWidth;
@@ -390,4 +413,15 @@ public class GameLogic {
 		ball.y = paddle.getCenterY() - paddle.height/2 - ballLength;
 	}
 	
+	public void getPowerup() {
+		int powerup = (int)(Math.floor(Math.random() * 2));
+		if (powerup == 0) {
+			this.lives += 1;
+		}
+		else {
+			this.paddlePowerup = true;
+			this.paddle.color = Color.RED;
+			this.paddle.width = this.windowWidth / 5;
+		}
+	}
 }
