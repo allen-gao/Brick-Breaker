@@ -1,7 +1,7 @@
 package com.example;
 
+import java.awt.Button;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.ButtonGroup;
@@ -27,6 +28,14 @@ public class GameWindow extends JPanel {
 	public boolean gameScreen = false;
 	
 	GameLogic gameLogic;
+	
+	JRadioButton collisionCheatOn;
+	JRadioButton collisionCheatOff;
+	JRadioButton infiniteLivesOn;
+	JRadioButton infiniteLivesOff;
+	Button play;
+	Button quit;
+	
 
 	public GameWindow(int width, int height, int frameRate, int ballSpeed) {
 		this.width = width;
@@ -49,8 +58,8 @@ public class GameWindow extends JPanel {
 		
 		this.setLayout(null);
 		
-		JRadioButton collisionCheatOn = new JRadioButton("Off");
-	    JRadioButton collisionCheatOff = new JRadioButton("On");
+		collisionCheatOn = new JRadioButton("Off");
+	    collisionCheatOff = new JRadioButton("On");
 	    collisionCheatOn.setBounds(width/2 + 30, 311, 50, 30);
 	    collisionCheatOn.setBackground(Color.BLACK);
 	    collisionCheatOn.setForeground(Color.WHITE);
@@ -65,8 +74,8 @@ public class GameWindow extends JPanel {
 	    this.add(collisionCheatOff);
 	    collisionCheatOn.setSelected(true);
 	    
-	    JRadioButton infiniteLivesOn = new JRadioButton("Off");
-	    JRadioButton infiniteLivesOff = new JRadioButton("On");
+	    infiniteLivesOn = new JRadioButton("Off");
+	    infiniteLivesOff = new JRadioButton("On");
 	    infiniteLivesOn.setBounds(width/2 + 30, 342, 50, 30);
 	    infiniteLivesOn.setBackground(Color.BLACK);
 	    infiniteLivesOn.setForeground(Color.WHITE);
@@ -80,6 +89,31 @@ public class GameWindow extends JPanel {
 	    this.add(infiniteLivesOn);
 	    this.add(infiniteLivesOff);
 	    infiniteLivesOn.setSelected(true);
+	    
+	    play = new Button("Play");
+	    play.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+	    play.setBounds(width/2 - 110, 400, 70, 50);
+	    play.setBackground(Color.BLACK);
+	    play.setForeground(Color.WHITE);
+	    play.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		setSplashButtons(false);
+	    		gameScreen = true;
+	    	}
+	    });
+	    this.add(play);
+	    
+	    quit = new Button("Quit");
+	    quit.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+	    quit.setBounds(width/2 + 40, 400, 70, 50);
+	    quit.setBackground(Color.BLACK);
+	    quit.setForeground(Color.WHITE);
+	    quit.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		System.exit(0);
+	    	}
+	    });
+	    this.add(quit);
 	    
 	    this.setVisible(true);
 	}
@@ -113,6 +147,15 @@ public class GameWindow extends JPanel {
 		g.setFont(new Font("TimesRoman", Font.PLAIN, 15));
 		drawCenterString(g, "Bounce on bottom screen:", 330, -60);
 		drawCenterString(g, "Infinite lives:", 360, -20);
+	}
+	
+	public void setSplashButtons(boolean on) {
+		this.collisionCheatOn.setVisible(on);
+		this.collisionCheatOff.setVisible(on);
+		this.infiniteLivesOn.setVisible(on);
+		this.infiniteLivesOff.setVisible(on);
+		this.play.setVisible(on);
+		this.quit.setVisible(on);
 	}
 	
 	public void drawCenterString(Graphics g, String myString, int y, int xOffset) {
