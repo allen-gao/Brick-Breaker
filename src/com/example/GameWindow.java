@@ -42,8 +42,8 @@ public class GameWindow extends JPanel {
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				repaint();
-				//int collisionInt = gameLogic.ball.hasCollision(paddleXPos, paddleYPos, paddleWidth, paddleHeight);
-				//gameLogic.ball.setNewPosition(collisionInt);
+				int collisionInt = gameLogic.hasCollision();
+				gameLogic.moveBall(collisionInt);
 			}
 		};
 		new Timer(delay, taskPerformer).start();
