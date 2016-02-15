@@ -2,6 +2,7 @@ package com.example;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ public class GameLogic {
 	
 	Ball ball;
 	public int ballLength = 10;
-	public double ballXSpeed = 1;
-	public double ballYSpeed = 1;
+	public double ballXSpeed;
+	public double ballYSpeed;
 	
 	Paddle paddle;
 	public int paddleYOffset = 100;
@@ -26,26 +27,48 @@ public class GameLogic {
 	public int brickHeight;
 	ArrayList<Color> colorArray;
 	
+	public boolean aimPhase = true;
+	public Point aimPoint;
+	double dirX;
+	double dirY;
+	double aimLineX;
+	double aimLineY;
+	
+	boolean bottomCollision = false;
+	
 	
 	GameLogic(int windowWidth, int windowHeight) {
 		this.windowWidth = windowWidth;
 		this.windowHeight = windowHeight;
-		this.ball = new Ball(300, 300, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
-		this.paddle = new Paddle(0, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
+		
+		this.paddle = new Paddle(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset, paddleWidth, paddleHeight, Color.GRAY);
+		this.ball = new Ball(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ballLength, ballXSpeed, ballYSpeed, Color.WHITE);
+		
 		brickWidth = windowWidth / 15;
 		brickHeight = brickWidth / 2;
+		
 		colorArray = new ArrayList<Color>();
 		colorArray.add(Color.RED);
 		colorArray.add(Color.ORANGE);
 		colorArray.add(Color.YELLOW); 
 		colorArray.add(Color.GREEN);
 		colorArray.add(Color.MAGENTA);
+		
+		this.aimPoint = new Point(0, 0);
+	}
+	
+	public void runGame() {
+		if (!aimPhase) {
+			int collisionInt = hasCollision();
+			moveBall(collisionInt);
+		}
 	}
 	
 	public void paint(Graphics g) {
 		paddle.paintComponent(g);
 		paintBricks(g);
 		ball.paintComponent(g);
+		paintAimPoint(g);
 	}
 	
 	public void paintBricks(Graphics g) {
@@ -55,14 +78,40 @@ public class GameLogic {
 		}
 	}
 	
-	public void handleMouseEvent(MouseEvent e) {
-		int x = e.getX();
-		if (x > windowWidth - paddle.width/2)
-			x = windowWidth - paddle.width/2;
-		if (x < paddle.width/2)
-			x = paddle.width/2;
-		x -= paddle.width/2;
-		paddle.setLocation(x, paddle.y);
+	public void handleMouseMoveEvent(MouseEvent e) {
+		if (aimPhase) {
+			aimPoint.setLocation(e.getX(), e.getY());
+		}
+		else {
+			int x = e.getX();
+			if (x > windowWidth - paddle.width/2)
+				x = windowWidth - paddle.width/2;
+			if (x < paddle.width/2)
+				x = paddle.width/2;
+			x -= paddle.width/2;
+			paddle.setLocation(x, paddle.y);
+		}
+	}
+	
+	public void handleMouseClickEvent(MouseEvent e) {
+		if (aimPhase) {
+			aimPhase = false;
+			ball.xSpeed = this.dirX;
+			ball.ySpeed = this.dirY;
+		}
+	}
+	
+	public void paintAimPoint(Graphics g) {
+		if (aimPhase) {
+			this.dirX = aimPoint.x - ball.getCenterX();
+			this.dirY = aimPoint.y - ball.getCenterY();
+			double dirLen = Math.sqrt(dirX*dirX + dirY*dirY);
+			this.dirX = dirX / dirLen;
+			this.dirY = dirY / dirLen;
+			this.aimLineX = this.dirX * 90;
+			this.aimLineY = this.dirY * 90;
+			g.drawLine((int)(ball.getCenterX()), (int)(ball.getCenterY()), (int)(ball.getCenterX() + this.aimLineX), (int)(ball.getCenterY() + this.aimLineY));
+		}
 	}
 	
 	public Brick buildBrick(ArrayList<Brick> bricks) {
@@ -105,8 +154,18 @@ public class GameLogic {
 	}
 	
 	public void moveBall(int collisionInt) {
-		if (collisionInt == 1 || collisionInt == 3) {
+		if (collisionInt == 1) {
 			ball.ySpeed = -ball.ySpeed;
+		}
+		if (collisionInt == 3) {
+			if (this.bottomCollision) {
+				ball.ySpeed = -ball.ySpeed;
+			}
+			else {
+				this.aimPhase = true;
+				setDefaultLocation();
+			}
+			
 		}
 		else if (collisionInt == 2) {
 			ball.xSpeed = -ball.xSpeed;
@@ -145,7 +204,6 @@ public class GameLogic {
 			if (!brick.broken && ball.intersects(brick)) {
 				brick.broken = true;
 				int myint = brickCollisionType(brick);
-				System.out.println(myint);
 				return myint;
 			}
 		}
@@ -199,6 +257,11 @@ public class GameLogic {
 			return 3;
 		else
 			return 0;
+	}
+	
+	public void setDefaultLocation() {
+		this.paddle.setLocation(windowWidth/2 - paddleWidth/2, windowHeight - paddleYOffset);
+		this.ball.setFrame(paddle.getCenterX() - ballLength/2, paddle.getCenterY() - paddle.height/2 - ballLength, ball.length, ball.length);
 	}
 	
 }

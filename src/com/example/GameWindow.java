@@ -29,12 +29,16 @@ public class GameWindow extends JPanel {
 		
 		this.setBackground(Color.BLACK);
 		this.gameLogic = new GameLogic(width, height);
-		
-		this.addMouseMotionListener(new MouseAdapter() {
+		MouseAdapter mouseAdapter = new MouseAdapter() {
 			public void mouseMoved(MouseEvent e) {
-				gameLogic.handleMouseEvent(e);
+				gameLogic.handleMouseMoveEvent(e);
 			}
-		});
+			public void mouseClicked(MouseEvent e) {
+				gameLogic.handleMouseClickEvent(e);
+			}
+		};
+		this.addMouseListener(mouseAdapter);
+		this.addMouseMotionListener(mouseAdapter);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -56,8 +60,7 @@ public class GameWindow extends JPanel {
 		int delay = this.ballSpeed; //milliseconds
 		ActionListener taskPerformer = new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				int collisionInt = gameLogic.hasCollision();
-				gameLogic.moveBall(collisionInt);
+				gameLogic.runGame();
 			}
 		};
 		new Timer(delay, taskPerformer).start();
