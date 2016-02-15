@@ -58,24 +58,34 @@ public class GameWindow extends JPanel {
 		
 		this.setLayout(null);
 		
-		collisionCheatOn = new JRadioButton("Off");
-	    collisionCheatOff = new JRadioButton("On");
+		collisionCheatOn = new JRadioButton("On");
+	    collisionCheatOff = new JRadioButton("Off");
 	    collisionCheatOn.setBounds(width/2 + 30, 311, 50, 30);
 	    collisionCheatOn.setBackground(Color.BLACK);
 	    collisionCheatOn.setForeground(Color.WHITE);
+	    collisionCheatOn.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		gameLogic.bottomCollision = true;
+	    	}
+	    });
 	    collisionCheatOff.setBounds(width/2 + 80, 311, 50, 30);
 	    collisionCheatOff.setBackground(Color.BLACK);
 	    collisionCheatOff.setForeground(Color.WHITE);
+	    collisionCheatOff.addMouseListener(new MouseAdapter() {
+	    	public void mouseClicked(MouseEvent e) {
+	    		gameLogic.bottomCollision = false;
+	    	}
+	    });
 	    
 	    ButtonGroup buttonGroup = new ButtonGroup();
 	    buttonGroup.add(collisionCheatOn);
 	    buttonGroup.add(collisionCheatOff);
 	    this.add(collisionCheatOn);
 	    this.add(collisionCheatOff);
-	    collisionCheatOn.setSelected(true);
+	    collisionCheatOff.setSelected(true);
 	    
-	    infiniteLivesOn = new JRadioButton("Off");
-	    infiniteLivesOff = new JRadioButton("On");
+	    infiniteLivesOn = new JRadioButton("On");
+	    infiniteLivesOff = new JRadioButton("Off");
 	    infiniteLivesOn.setBounds(width/2 + 30, 342, 50, 30);
 	    infiniteLivesOn.setBackground(Color.BLACK);
 	    infiniteLivesOn.setForeground(Color.WHITE);
@@ -88,7 +98,7 @@ public class GameWindow extends JPanel {
 	    buttonGroup2.add(infiniteLivesOff);
 	    this.add(infiniteLivesOn);
 	    this.add(infiniteLivesOff);
-	    infiniteLivesOn.setSelected(true);
+	    infiniteLivesOff.setSelected(true);
 	    
 	    play = new Button("Play");
 	    play.setFont(new Font("TimesRoman", Font.PLAIN, 20));

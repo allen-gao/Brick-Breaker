@@ -253,8 +253,10 @@ public class GameLogic {
 			ball.y = 0;
 			return 1;
 		}
-		else if (ball.y > this.windowHeight)
+		else if (ball.y + ball.length > this.windowHeight) {
+			ball.y = this.windowHeight - ball.length;
 			return 3;
+		}
 		else
 			return 0;
 	}
