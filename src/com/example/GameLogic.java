@@ -96,8 +96,8 @@ public class GameLogic {
 	public void handleMouseClickEvent(MouseEvent e) {
 		if (aimPhase) {
 			aimPhase = false;
-			ball.xSpeed = this.dirX;
-			ball.ySpeed = this.dirY;
+			ball.xSpeed = this.dirX*2;
+			ball.ySpeed = this.dirY*2;
 		}
 	}
 	
