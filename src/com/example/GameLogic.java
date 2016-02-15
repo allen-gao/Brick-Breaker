@@ -342,6 +342,7 @@ public class GameLogic {
 		this.brickHeight = this.brickWidth / 2;
 		resizeBricks(this.bricks);
 		resizePaddle();
+		resizeBall();
 	}
 	
 	public void resizeBricks(ArrayList<Brick> bricks) {
@@ -382,6 +383,11 @@ public class GameLogic {
 		paddle.height = (int)paddleHeight;
 		paddle.x = (int)(windowWidth/2 - paddleWidth/2);
 		paddle.y = (int)(this.windowHeight - paddleYOffset);
+	}
+	
+	public void resizeBall() {
+		ball.x = paddle.getCenterX() - ballLength/2;
+		ball.y = paddle.getCenterY() - paddle.height/2 - ballLength;
 	}
 	
 }
